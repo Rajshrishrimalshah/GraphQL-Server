@@ -1,0 +1,24 @@
+# Special property that should be specified at the top of the file.
+root = true
+[*]
+
+### All files
+[*]
+
+# Force charset utf-8 - set to control character set
+charset = utf-8
+
+# Indentation :  set to tab or space to use hard tabs or soft tabs.
+indent_style = space
+
+# A whole number define	the number of column used for indentation
+indent_size = 2
+
+#"true" esures file ends with a new line
+insert_final_newline = true
+
+#"true" to remove anywhite space characters
+trim_trailing_whitespace = true
+
+#set to control how line breaks are represented
+end_of_line = lf
