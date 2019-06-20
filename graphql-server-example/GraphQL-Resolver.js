@@ -1,5 +1,4 @@
-import { ApolloServer, gql, PubSub } from "apollo-server";
-
+import { ApolloServer, gql } from "apollo-server";
 import { find, filter } from "lodash";
 
 const users = {
@@ -54,22 +53,11 @@ const typeDefs = gql`
   type User {
     id: ID!
     username: String!
-    firstLetterOfUsername: String!
-  }
-
-  type Subscription {
-    newUser: User!
+    firstLetterOfResolver: String!
   }
 `;
 
-const NEW_USER = "NEW_USER";
-
 const resolvers = {
-  Subscription: {
-    newUser: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(NEW_USER)
-    }
-  },
   UserDemo: {
     username: () => {
       return "I am username from UserDemo";
@@ -85,6 +73,7 @@ const resolvers = {
       username: "RAJ"
     })
   },
+
   Mutation: {
     login: async (parent, { userInfo: { username } }, context) => {
       // resolvers are async
@@ -92,50 +81,27 @@ const resolvers = {
       // await checkPassword()
       return username;
     },
-    register: (_, { userInfo: { username } }, { pubsub }) => {
-      const user = {
-        id: 1,
-        username
-      };
-
-      pubsub.publish(NEW_USER, {
-        newUser: user
-      });
-
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "bad"
-          },
-          {
-            field: "username2",
-            message: "bad2"
-          }
-        ],
-        user
-      };
-    }
+    register: (parent, args) => users
   },
+
   User: {
     username: parent => {
       // console.log(parent);
-      return parent.username;
+      return parent.username
     }
   },
+
   User: {
-    firstLetterOfUsername: parent => {
-      return parent.username ? parent.username[0] : null;
+    firstLetterOfResolver: parent => {
+      return parent.username ? parent.username[0] : null
     }
   }
 };
 
-const pubsub = new PubSub();
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req, res }) => ({ req, res, pubsub })
+  context: ({ req, res }) => (req, res)
 });
 
 server.listen().then(({ url }) => {

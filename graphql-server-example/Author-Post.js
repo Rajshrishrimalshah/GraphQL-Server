@@ -1,5 +1,6 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import { ApolloServer, gql } from "apollo-server";
+import { find, filter } from 'lodash';
 
 const typeDefs = `
   type Author {

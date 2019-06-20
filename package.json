@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "extra": "npx babel-node graphql-server-example",
-    "start": "nodemon --exec npx babel-node graphql-server-example/"
+    "start": "nodemon --exec npx babel-node graphql-server-example/GraphQL-Resolver.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,8 @@
   "dependencies": {
     "apollo-server": "^2.6.3",
     "graphql": "^14.3.1",
-    "graphql-tools": "^4.0.4"
+    "graphql-tools": "^4.0.4",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
