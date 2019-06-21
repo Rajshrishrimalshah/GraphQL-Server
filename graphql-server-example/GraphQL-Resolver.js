@@ -1,5 +1,6 @@
-import { ApolloServer, gql } from "apollo-server";
+import { ApolloServer,gql } from 'apollo-server-express';
 import { find, filter } from "lodash";
+import express from 'express';
 
 const users = {
   errors: [
@@ -21,7 +22,7 @@ const users = {
 const typeDefs = gql`
   type Query {
     hello(name: String): String!
-    user: UserDemo
+    user(name: String): UserDemo
   }
 
   type UserDemo {
@@ -37,7 +38,7 @@ const typeDefs = gql`
 
   type Mutation {
     register(userInfo: UserInfo): RegisterResponse
-    login(userInfo: UserInfo): String!
+    login(userInfo: UserInfo): RegisterResponse
   }
 
   type RegisterResponse {
@@ -59,18 +60,16 @@ const typeDefs = gql`
 
 const resolvers = {
   UserDemo: {
-    username: () => {
-      return "I am username from UserDemo";
+    username: (parent, {name})=> {
+      return `I am ${parent.username} from UserDemo`;
     }
   },
 
   Query: {
-    hello: (parent, { name }) => {
-      return `Hello  ${name}!`;
-    },
-    user: () => ({
-      id: 1,
-      username: "RAJ"
+    hello: (_, {name} ) => `hello ${name}`,
+    user:  (_, {name}) => ({
+      id:1,
+      username: `${name}`,
     })
   },
 
@@ -79,7 +78,9 @@ const resolvers = {
       // resolvers are async
       //check password
       // await checkPassword()
-      return username;
+      users.user.username =username;
+      console.log("users :",users);
+      return users;
     },
     register: (parent, args) => users
   },
@@ -104,6 +105,11 @@ const server = new ApolloServer({
   context: ({ req, res }) => (req, res)
 });
 
-server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`);
+const app = express();
+
+server.applyMiddleware({ app, path: '/graphql' });
+
+
+app.listen({ port: 4000 }, () => {
+  console.log('Apollo Server on http://localhost:4000/graphql');
 });

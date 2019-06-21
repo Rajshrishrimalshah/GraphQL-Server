@@ -1,5 +1,5 @@
-import { ApolloServer, gql } from "apollo-server";
-import { find, filter } from 'lodash';
+import { ApolloServer, gql, makeExecutableSchema } from "apollo-server";
+import { find, filter } from "lodash";
 
 const students = [
   {
@@ -7,17 +7,16 @@ const students = [
     firstName: "XYZ",
     lastName: "WSN",
     college: "KJCOEMR",
-    married: true,
-
+    married: true
   },
   {
-    id:2,
+    id: 2,
     firstName: "ABC",
     lastName: "EFG",
     college: "Wadia-College",
     married: false
   }
-]
+];
 
 const books = [
   {
@@ -32,51 +31,62 @@ const books = [
     author: "RJ",
     studentId: 2
   }
-]
+];
 
-const typeDefs = gql `
+const typeDefs = gql`
+  interface IStudent {
+    id: Int!
+    firstName: String
+    lastName: String
+    college: String
+    book: [Book]
+  }
 
-type Student {
-  id: Int!,
-  firstName: String,
-  lastName: String,
-  college: String,
-  married: Boolean,
-  book: Book
-}
+  type Student implements IStudent {
+    id: Int!
+    firstName: String
+    lastName: String
+    college: String
+    married: Boolean
+    book: [Book]
+  }
 
-type Book {
-  id: Int!,
-  name: String,
-  student: Student
-}
+  type Book {
+    id: Int!
+    name: String
+    student: Student
+  }
 
-type Query {
-  students: [Student]
-  book(id: Int!): Book
-}
+  type Query {
+    students: [Student]
+    book(id: Int!): Book
+  }
 `;
-
 
 const resolvers = {
   Query: {
     students: () => students,
-    book:  (_, { id }) => find(books, { id }),
+    book: (_, { id }) => find(books, { id })
   },
 
   Student: {
-  book: student => {
-    return find(books, { studentId: student.id })
+    book: student => {
+      return filter(books, { studentId: student.id });
+    }
   },
-},
 
-Book: {
-  student: book => find(students, { id: book.studentId }),
-},
-
+  Book: {
+    student: book => find(students, { id: book.studentId })
   }
+};
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+  resolverValidationOptions: { requireResolversForResolveType: false }
+});
+
+const server = new ApolloServer({ schema });
 
 server.listen().then(({ url }) => {
   console.log(`Server ready at ${url}`);
