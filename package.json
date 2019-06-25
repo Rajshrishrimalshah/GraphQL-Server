@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "extra": "npx babel-node graphql-server-example",
-    "start": "nodemon --exec npx babel-node graphql-server-example/index.js"
+    "start": "nodemon --exec npx babel-node Test/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,10 +18,12 @@
   },
   "homepage": "https://github.com/Rajshrishrimalshah/GraphQL-Server#readme",
   "dependencies": {
-    "apollo-server": "^2.6.4",
+    "apollo-datasource-rest": "0.1.5",
+    "apollo-server": "2.1.0",
     "apollo-server-express": "^2.6.4",
+    "babel-preset-latest-node": "^3.2.1",
     "express": "^4.17.1",
-    "graphql": "^14.3.1",
+    "graphql": "14.0.2",
     "graphql-tools": "^4.0.4",
     "lodash": "^4.17.11"
   },
@@ -32,6 +33,7 @@
     "@babel/preset-env": "^7.4.3",
     "tsc-watch": "^2.1.2",
     "typescript": "^3.4.5",
-    "@types/node": "^11.13.7"
+    "@types/node": "^11.13.7",
+    "@types/graphql": "14.0.1"
   }
 }
