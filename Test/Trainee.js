@@ -9,7 +9,7 @@ export class Trainee extends RESTDataSource {
   willSendRequest(request) {
     request.headers.set(
       "Authorization",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNmQ2NTNiYTA4YzE5MDA1MjM1ZWE1MiIsImlhdCI6MTU2MTQ2MDcyN30.vErXlgx_p7hnd4EAr3wjCY039Yz8wYUNXVxlxu2ECik"
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNmQ2NTNiYTA4YzE5MDA1MjM1ZWE1MiIsImlhdCI6MTU2MTUyMjIzNX0.UPvEcRKtpS04xdgwZRRx2cwHiayKLcyrG3ZqAr0wqxk"
     );
   }
 
@@ -18,27 +18,39 @@ export class Trainee extends RESTDataSource {
     return response.data;
   }
 
-  async getTraineeDetails() {
+  async getTraineeDetails(limit = 50, skip = 200) {
     const response = await this.get("/api/trainee", {
-      limit: 5,
-      skip: 100
+      limit,
+      skip
     });
 
     const res = response.data.records;
     return res;
   }
 
-  async createTrainee() {
-    const user = {
-      name: "Raj",
-      email: "RAJ@GMAIL.COM",
-      password: "RAJ@GMAIL.COM"
-    };
-    const { name, email, password } = user;
+  async createTrainee(name, email, password) {
     const response = await this.post("/api/trainee", {
-    name, email, password
+      name,
+      email,
+      password
     });
-    const res = response.message;
-    return res;
+
+    return response;
+  }
+
+  async updateTrainee(id, name, email) {
+    const response = await this.put("/api/trainee", {
+      id,
+      name,
+      email
+    });
+
+    return response;
+  }
+
+  async deleteTrainee(id) {
+    const response = await this.delete(`/api/trainee/${id}`);
+
+    return response;
   }
 }
