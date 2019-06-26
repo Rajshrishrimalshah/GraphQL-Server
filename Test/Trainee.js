@@ -9,7 +9,7 @@ export class Trainee extends RESTDataSource {
   willSendRequest(request) {
     request.headers.set(
       "Authorization",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNmQ2NTNiYTA4YzE5MDA1MjM1ZWE1MiIsImlhdCI6MTU2MTUyMjIzNX0.UPvEcRKtpS04xdgwZRRx2cwHiayKLcyrG3ZqAr0wqxk"
+      this.context.token
     );
   }
 
