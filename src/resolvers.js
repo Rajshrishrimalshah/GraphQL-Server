@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { PubSub } from "apollo-server";
 
 const user_Added = "USER_ADDED";
-const user_Deleted = "USER_DELETED"
+const user_Deleted = "USER_DELETED";
 const pubsub = new PubSub();
 
 export const resolvers = {
@@ -32,15 +32,13 @@ export const resolvers = {
     getTrainee: (_, __, { dataSources }) => {
       return dataSources.trainee.getTrainee();
     },
-    getTraineeDetail: async (_, {limit, skip}, { dataSources }) => {
+    getTraineeDetail: async (_, { limit, skip }, { dataSources }) => {
       return await dataSources.trainee.getTraineeDetails(limit, skip);
     }
   },
 
   Mutation: {
-    createTrainee: async (_, {name, email, password}, { dataSources }) => {
-      // const res = await dataSources.trainee.createTrainee();
-      // return res;
+    createTrainee: async (_, { name, email, password }, { dataSources }) => {
       const res = dataSources.trainee.createTrainee(name, email, password);
       pubsub.publish(user_Added, { userCreated: res });
       return res;
@@ -48,9 +46,9 @@ export const resolvers = {
     updateTrainee: (_, { id, name, email }, { dataSources }) => {
       return dataSources.trainee.updateTrainee(id, name, email);
     },
-    deleteTrainee: (_, {id}, { dataSources }) => {
+    deleteTrainee: (_, { id }, { dataSources }) => {
       const res = dataSources.trainee.deleteTrainee(id);
-      pubsub.publish(user_Deleted, {userDeleted: res});
+      pubsub.publish(user_Deleted, { userDeleted: res });
       return res;
     }
   },

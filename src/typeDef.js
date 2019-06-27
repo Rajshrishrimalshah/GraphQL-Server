@@ -37,9 +37,9 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createTrainee(name: String!, email: String!, password: String!): Create
-    updateTrainee(id: String!, name: String!, email: String!): Update
-    deleteTrainee(id: String!): Update
+    createTrainee(name: String, email: String, password: String): Create
+    updateTrainee(id: String, name: String, email: String): Update
+    deleteTrainee(id: String): Update
   }
 
   type Subscription {
