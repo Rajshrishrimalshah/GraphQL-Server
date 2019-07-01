@@ -1,5 +1,5 @@
 import express from "express";
-import { ApolloServer, gql, PubSub } from "apollo-server-express";
+import { ApolloServer, gql, PubSub, withFilter } from "apollo-server-express";
 import http from "http";
 
 const user_Added = "USER_ADDED";
@@ -25,7 +25,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    userAdded: User
+    userAdded(id: Int): User
     userUpdated: User
   }
 `;
@@ -73,11 +73,17 @@ const resolvers = {
     }
   },
 
+  //subscribe: () => pubsub.asyncIterator(user_Added)
   Subscription: {
     userAdded: {
-      subscribe: () => pubsub.asyncIterator(user_Added)
-    },
-
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(user_Added),
+        (payload, variables) => {
+        return payload.userAdded.id === variables.id
+        },
+      ),
+    }
+    ,
     userUpdated: {
       subscribe: () => pubsub.asyncIterator(user_Updated)
     }

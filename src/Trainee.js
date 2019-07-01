@@ -1,5 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
-
+import { ApolloError } from "apollo-server";
 export class Trainee extends RESTDataSource {
   constructor() {
     super();
@@ -7,10 +7,7 @@ export class Trainee extends RESTDataSource {
   }
 
   willSendRequest(request) {
-    request.headers.set(
-      "Authorization",
-      this.context.token
-    );
+    request.headers.set("Authorization", this.context.token);
   }
 
   async getTrainee() {
@@ -44,13 +41,15 @@ export class Trainee extends RESTDataSource {
       name,
       email
     });
-
     return response;
   }
 
   async deleteTrainee(id) {
-    const response = await this.delete(`/api/trainee/${id}`);
-
-    return response;
+    try {
+      const response = await this.delete(`/api/trainee/${id}`);
+      return response;
+    } catch (error) {
+      throw new ApolloError("You cannot delete user");
+    }
   }
 }

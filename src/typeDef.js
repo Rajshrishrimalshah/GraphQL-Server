@@ -12,6 +12,7 @@ const typeDefs = gql`
     name: String
     role: String
     email: String
+    originalId: ID
   }
 
   type Create {
