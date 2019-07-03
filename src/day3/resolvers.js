@@ -1,6 +1,4 @@
-import express from "express";
-import { ApolloServer, gql, PubSub, withFilter } from "apollo-server-express";
-import http from "http";
+import { PubSub, withFilter } from "apollo-server-express";
 
 const user_Added = "USER_ADDED";
 const user_Updated = "USER_UPDATED";
@@ -8,31 +6,8 @@ const new_User_Added = "NEW_USER_ADDED";
 const pubsub = new PubSub();
 
 let users = [];
-const typeDefs = gql`
-  type Query {
-    users: [User]
-    user(id: Int): User
-  }
 
-  type Mutation {
-    createUser(id: Int, username: String): User
-    deleteUser(id: Int): User
-    updateUser(id: Int, username: String): User
-  }
-
-  type User {
-    id: Int
-    username: String
-  }
-
-  type Subscription {
-    userAdded(id: Int): User
-    userUpdated: User
-    newUserAdded: User
-  }
-`;
-
-const resolvers = {
+export const resolvers = {
   Query: {
     users: () => {
       return users;
@@ -45,7 +20,8 @@ const resolvers = {
   },
 
   Mutation: {
-    async createUser(parent, { id, username }) {
+    async createUser(parent, args) {
+      const { id, username } = args;
       let user = { id, username };
       users = [...users, user];
       await pubsub.publish(user_Added, { userAdded: user });
@@ -94,15 +70,3 @@ const resolvers = {
     }
   }
 };
-
-const app = express();
-
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
-apolloServer.applyMiddleware({ app });
-
-const httpServer = http.createServer(app);
-apolloServer.installSubscriptionHandlers(httpServer);
-
-httpServer.listen({ port: 9000 }, () => {
-  console.log("Apollo Server on http://localhost:9000/graphql");
-});
