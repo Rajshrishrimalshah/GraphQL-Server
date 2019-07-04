@@ -5,7 +5,9 @@ const user_Updated = "USER_UPDATED";
 const new_User_Added = "NEW_USER_ADDED";
 const pubsub = new PubSub();
 
-let users = [];
+let id = 2;
+
+let users = [{ id: 1, username: "Test" }];
 
 export const resolvers = {
   Query: {
@@ -20,12 +22,15 @@ export const resolvers = {
   },
 
   Mutation: {
-    async createUser(parent, args) {
-      const { id, username } = args;
+    async createUser(parent, { username }) {
       let user = { id, username };
+      console.log(`${id} and ${username}`);
       users = [...users, user];
       await pubsub.publish(user_Added, { userAdded: user });
-      await pubsub.publish(new_User_Added, { newUserAdded: user });
+      await pubsub.publish(new_User_Added, {
+        newUserAdded: user
+      });
+      id++;
       return user;
     },
 
@@ -47,7 +52,9 @@ export const resolvers = {
           (user.id = id), (user.username = username);
         }
       });
-      await pubsub.publish(user_Updated, { userUpdated: userData });
+      await pubsub.publish(user_Updated, {
+        userUpdated: userData
+      });
       return userData;
     }
   },

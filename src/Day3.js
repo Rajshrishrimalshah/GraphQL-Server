@@ -6,8 +6,9 @@ const user_Added = "USER_ADDED";
 const user_Updated = "USER_UPDATED";
 const new_User_Added = "NEW_USER_ADDED";
 const pubsub = new PubSub();
+let id = 2;
 
-let users = [];
+let users = [{ id: 1, username: "Test" }];
 const typeDefs = gql`
   type Query {
     users: [User]
@@ -15,7 +16,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(id: Int, username: String): User
+    createUser(username: String): User
     deleteUser(id: Int): User
     updateUser(id: Int, username: String): User
   }
@@ -45,11 +46,12 @@ const resolvers = {
   },
 
   Mutation: {
-    async createUser(parent, { id, username }) {
+    async createUser(parent, { username }) {
       let user = { id, username };
       users = [...users, user];
       await pubsub.publish(user_Added, { userAdded: user });
       await pubsub.publish(new_User_Added, { newUserAdded: user });
+      id++;
       return user;
     },
 
