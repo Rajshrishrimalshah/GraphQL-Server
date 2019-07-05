@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec npx babel-node src/Day3.js"
+    "start": "nodemon --exec npx babel-node src/server.js"
   },
   "repository": {
     "type": "git",
