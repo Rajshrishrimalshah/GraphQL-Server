@@ -32,7 +32,7 @@ export const resolvers = {
     getTrainee: (_, __, { dataSources }) => {
       return dataSources.trainee.getTrainee();
     },
-    getTraineeDetail: async (_, { limit }, { dataSources }) => {
+    getTraineeDetail: async (_, { limit, skip }, { dataSources }) => {
       return await dataSources.trainee.getTraineeDetails(limit, skip);
     }
   },

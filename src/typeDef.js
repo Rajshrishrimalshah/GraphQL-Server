@@ -49,4 +49,4 @@ const typeDefs = gql`
   }
 `;
 
-export {typeDefs};
+export { typeDefs };
