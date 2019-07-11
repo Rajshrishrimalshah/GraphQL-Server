@@ -39,7 +39,11 @@ export const resolvers = {
 
   Mutation: {
     createTrainee: async (_, { name, email, password }, { dataSources }) => {
-      const res = dataSources.trainee.createTrainee(name, email, password);
+      const traineeDetails = {
+        loginInfo: { name, email, password },
+        address: { addr: "asdas" }
+      };
+      const res = dataSources.trainee.createTrainee(traineeDetails);
       pubsub.publish(user_Added, { userCreated: res });
       return res;
     },

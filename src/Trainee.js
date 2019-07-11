@@ -25,13 +25,9 @@ export class Trainee extends RESTDataSource {
     return res;
   }
 
-  async createTrainee(name, email, password) {
-    const response = await this.post("/api/trainee", {
-      name,
-      email,
-      password
-    });
-
+  async createTrainee(details) {
+    const { loginInfo } = details;
+    const response = await this.post("/api/trainee", { ...loginInfo });
     return response;
   }
 
