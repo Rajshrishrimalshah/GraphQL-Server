@@ -23,7 +23,7 @@
     "dist"
   ],
   "include": [
-    "graphql-server-example"
+    "src/graphql-server-example"
   ],
   "types": [
     "src/types"

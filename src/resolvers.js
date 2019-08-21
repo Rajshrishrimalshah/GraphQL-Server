@@ -22,7 +22,7 @@ export const resolvers = {
           method: "GET",
           headers: {
             Authorization:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNmQ2NTNiYTA4YzE5MDA1MjM1ZWE1MiIsImlhdCI6MTU2MTQ2MDcyN30.vErXlgx_p7hnd4EAr3wjCY039Yz8wYUNXVxlxu2ECik"
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNmQ2NTNiYTA4YzE5MDA1MjM1ZWE1MiIsImlhdCI6MTU2NjE5OTU1OH0.qpj-PzdgZC2uKi_cUH4AXH3ZUIwVs5tCYwisUziuXmw"
           }
         }
       );
@@ -39,20 +39,17 @@ export const resolvers = {
 
   Mutation: {
     createTrainee: async (_, { name, email, password }, { dataSources }) => {
-      const traineeDetails = {
-        loginInfo: { name, email, password },
-        address: { addr: "asdas" }
-      };
-      const res = dataSources.trainee.createTrainee(traineeDetails);
-      pubsub.publish(user_Added, { userCreated: res });
+
+      const res = dataSources.trainee.createTrainee({name, email, password});
+      await pubsub.publish(user_Added, { userCreated: res });
       return res;
     },
     updateTrainee: (_, { id, name, email }, { dataSources }) => {
       return dataSources.trainee.updateTrainee(id, name, email);
     },
-    deleteTrainee: (_, { id }, { dataSources }) => {
+    deleteTrainee: async (_, { id }, { dataSources }) => {
       const res = dataSources.trainee.deleteTrainee(id);
-      pubsub.publish(user_Deleted, { userDeleted: res });
+      await pubsub.publish(user_Deleted, { userDeleted: res });
       return res;
     }
   },

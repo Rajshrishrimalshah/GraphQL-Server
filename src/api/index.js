@@ -1,4 +1,4 @@
-import { ApolloServer } from "apollo-server";
+import {ApolloServer} from 'apollo-server';
 
 import { TestAPI } from './TestAPI';
 import { resolvers } from './resolvers';

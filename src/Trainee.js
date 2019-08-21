@@ -19,15 +19,13 @@ export class Trainee extends RESTDataSource {
     const response = await this.get("/api/trainee", {
       limit,
       skip
-    });
-
+    })
     const res = response.data.records;
     return res;
   }
 
   async createTrainee(details) {
-    const { loginInfo } = details;
-    const response = await this.post("/api/trainee", { ...loginInfo });
+    const response = await this.post("/api/trainee", { ...details });
     return response;
   }
 

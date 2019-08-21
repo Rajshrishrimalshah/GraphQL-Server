@@ -7,7 +7,15 @@ const pubsub = new PubSub();
 
 let id = 2;
 
-let users = [{ id: 1, username: "Test" }];
+let users = [
+  { id: 1, username: "Test" },
+  { id: 2, username: "Test" },
+  { id: 3, username: "Test" },
+  { id: 4, username: "Test" },
+  { id: 5, username: "Test" },
+  { id: 6, username: "Test" },
+  { id: 7, username: "Test" }
+];
 
 export const resolvers = {
   Query: {
@@ -23,8 +31,8 @@ export const resolvers = {
 
   Mutation: {
     async createUser(parent, { username }) {
-      let user = { id, username };
-      console.log(`${id} and ${username}`);
+      let user = { id, username, age: 21 };
+    //  console.log(`${id} and ${username}`);
       users = [...users, user];
       await pubsub.publish(user_Added, { userAdded: user });
       await pubsub.publish(new_User_Added, {
@@ -36,10 +44,12 @@ export const resolvers = {
 
     deleteUser: (parent, { id }) => {
       let temp = {};
+      let i=1
       users = users.filter(user => {
         if (user.id !== id) {
           return user;
         }
+        console.log(user)
         temp = user;
       });
       return temp;
@@ -49,7 +59,8 @@ export const resolvers = {
       let userData = { id, username };
       users.map(user => {
         if (user.id === id) {
-          (user.id = id), (user.username = username);
+          user.id = id;
+          user.username = username;
         }
       });
       await pubsub.publish(user_Updated, {

@@ -1,9 +1,31 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
+
+  type Name {
+    title: String
+    first: String
+    last: String
+  }
+
+  type Coordinates {
+    latitude: String,
+    longitude: String
+  }
+
+  type Location {
+    street: String,
+    city: String,
+    state: String,
+    postcode: Int
+    coordinates: Coordinates
+  }
+
   type Person {
-    gender: String
-    email: String
+    name: Name,
+    location: Location,
+    gender: String,
+    email: String,
     phone: String
   }
 
